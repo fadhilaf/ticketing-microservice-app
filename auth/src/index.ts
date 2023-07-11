@@ -1,5 +1,6 @@
 import express from "express";
 import { json } from "body-parser";
+import "express-async-errors"; // package ini harus diimport sebelum import routes, karena package ini akan ngehandle error yg terjadi di async function
 
 import { signupRouter } from "./routes/signup";
 import { signinRouter } from "./routes/signin";
@@ -18,8 +19,10 @@ app.use(signinRouter);
 app.use(signoutRouter);
 app.use(currentUserRouter);
 
-app.get("*", (req, res) => {
-  throw new NotFoundError();
+//for all http method
+app.all("*", async (req, res) => {
+  // next(new NotFoundError()); // utk middleware yg async, default express ngehandle errornya harus pake "next", jadi parameter middleware ny jg harus req, res, next
+  throw new NotFoundError(); //kalo pake package express-async-errors, bisa langsung throw error
 });
 
 app.use(errorHandler);
