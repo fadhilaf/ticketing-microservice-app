@@ -1,6 +1,7 @@
 import express from "express";
 import { json } from "body-parser";
 import "express-async-errors"; // package ini harus diimport sebelum import routes, karena package ini akan ngehandle error yg terjadi di async function
+import mongoose from "mongoose";
 
 import { signupRouter } from "./routes/signup";
 import { signinRouter } from "./routes/signin";
@@ -27,6 +28,17 @@ app.all("*", async (req, res) => {
 
 app.use(errorHandler);
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
-});
+const start = async () => {
+  try {
+    await mongoose.connect("mongodb://auth-mongo-srv:27017/auth");
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.error(err);
+  }
+
+  app.listen(3000, () => {
+    console.log("Server running on port 3000");
+  });
+};
+
+start();
