@@ -1,13 +1,14 @@
-import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { Router, Request, Response } from "express";
+import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 
-import { RequestValidationError } from "../errors/request-validation-error";
 import { BadRequestError } from "../errors/bad-request-error";
+
+import { validateRequest } from "../middlewares/validate-request";
 
 import User from "../models/user";
 
-const router = express.Router();
+const router = Router();
 
 router.post(
   "/api/users/signup",
@@ -19,14 +20,9 @@ router.post(
       .trim()
       .isLength({ min: 4, max: 20 })
       .withMessage("Password must be between 4 and 20 characters"),
+    validateRequest, // middleware custom buatan kito
   ],
   async (req: Request, res: Response) => {
-    // middleware express-validator dk biso return response error, jadi kito handle di controller ambil cek hasil validasiny pake validationResult trus return response error kalo error
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array()); //kalo derived class dari class Error, kito bisa throw class errorny. (kalo perlu type class di javascript kito biso assign subclassny auto upcasting)
-    }
-
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
