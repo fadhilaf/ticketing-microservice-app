@@ -19,7 +19,7 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false, // disable cookie encryption (krn pake jwt)
-    secure: true, // cookie only works if user visit our app using https connection
+    secure: process.env.NODE_ENV !== "test", // cookie only works if user visit our app using https connection
   })
 );
 
