@@ -15,3 +15,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: fadhilaf/client-ticketing-test
+      context: client
+      docker: 
+        dockerfile: Dockerfile
+      sync: 
+        manual:
+          - src: 'app/**/*.{tsx,css}'
+            dest: .
