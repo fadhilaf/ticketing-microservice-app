@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-}
+/* :root { */
+/* } */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-  }
-}
+/* @media (prefers-color-scheme: dark) { */
+/*   :root { */
+/*   } */
+/* } */
 
-body {
-}
+/* body { */
+/* } */
