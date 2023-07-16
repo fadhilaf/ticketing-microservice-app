@@ -1,15 +1,12 @@
 "use client"; //kalau pengen interaktif, harus pake client component. tapi kalo dk perlu interaktif trus cuma pengen fetch data pas restart bae, pake server component
 import { useState, FormEvent } from "react";
-import axios, { AxiosResponse, AxiosError } from "axios";
 
-type ErrorApiResponse = {
-  errors: ErrorApiResponseField;
+import useFormSubmit, { ErrorDetails } from "@/hook/use-form-submit";
+
+type SignupApiResponseBody = {
+  id: string;
+  email: string;
 };
-
-type ErrorApiResponseField = {
-  message: string;
-  field?: string;
-}[];
 
 interface SignupFormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -17,7 +14,7 @@ interface SignupFormElements extends HTMLFormControlsCollection {
 }
 
 export default function Signup() {
-  const [errors, setErrors] = useState<ErrorApiResponseField>([]);
+  const [errors, setErrors] = useState<ErrorDetails>([]);
 
   const [successMessage, setSuccessMessage] = useState<string>("");
 
@@ -28,37 +25,25 @@ export default function Signup() {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsButtonDisabled(true);
-    setErrors([]);
-    setEmailError("");
-    setPasswordError("");
 
     const elements = e.currentTarget.elements as SignupFormElements;
 
     try {
-      await axios.post<ErrorApiResponse>("/api/users/signup", {
-        email: elements.email.value,
-        password: elements.password.value,
-      });
+      await useFormSubmit<{ email: string; password: string }, SignupApiResponseBody>(
+        "/api/users/signup",
+        "post",
+        {
+          email: elements.email.value,
+          password: elements.password.value,
+        },
+        { email: setEmailError, password: setPasswordError },
+        setErrors,
+        setIsButtonDisabled
+      );
 
       setSuccessMessage("Successfully signed up");
     } catch (err) {
-      const error = err as AxiosError<ErrorApiResponse, any>;
-
-      error.response?.data.errors.forEach((error) => {
-        switch (error.field) {
-          case "email":
-            setEmailError(error.message);
-            break;
-          case "password":
-            setPasswordError(error.message);
-            break;
-          default:
-            setErrors((prev) => [...prev, error]);
-        }
-      });
-
-      setIsButtonDisabled(false);
+      console.log(err);
     }
   };
 
