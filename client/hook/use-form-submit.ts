@@ -16,7 +16,7 @@ export default async function useFormSubmit<TRequestBody, TSuccessResponse>(
   body: TRequestBody,
   fieldErrorSetStates: { [key in keyof TRequestBody]: Dispatch<string> },
   errorsSetState: Dispatch<SetStateAction<ErrorDetails>>,
-  setIsButtonDisabled: Dispatch<SetStateAction<boolean>>
+  setIsSubmitDisabled: Dispatch<SetStateAction<boolean>>
 ): Promise<AxiosResponse<TRequestBody, any>> {
   // Reset all errors on each field
   Object.keys(fieldErrorSetStates).forEach((key) => {
@@ -25,14 +25,14 @@ export default async function useFormSubmit<TRequestBody, TSuccessResponse>(
   // Reset all errors
   errorsSetState([]);
 
-  setIsButtonDisabled(true);
+  setIsSubmitDisabled(true);
 
   try {
     const res = await axios[method]<TRequestBody>(url, body);
 
     return res;
   } catch (err) {
-    setIsButtonDisabled(false);
+    setIsSubmitDisabled(false);
 
     const error = err as AxiosError<ErrorApiResponseBody, any>;
 

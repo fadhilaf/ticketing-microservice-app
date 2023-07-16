@@ -2,6 +2,7 @@
 import { useState, FormEvent } from "react";
 
 import useFormSubmit, { ErrorDetails } from "@/hook/use-form-submit";
+import AuthForm from "@/component/auth-form";
 
 type SignupApiResponseBody = {
   id: string;
@@ -18,7 +19,7 @@ export default function Signup() {
 
   const [successMessage, setSuccessMessage] = useState<string>("");
 
-  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(false);
 
   const [emailError, setEmailError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
@@ -38,7 +39,7 @@ export default function Signup() {
         },
         { email: setEmailError, password: setPasswordError },
         setErrors,
-        setIsButtonDisabled
+        setIsSubmitDisabled
       );
 
       setSuccessMessage("Successfully signed up");
@@ -49,58 +50,30 @@ export default function Signup() {
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email address
-          </label>
-          {emailError ? (
-            <>
-              <input type="email" className="form-control is-invalid" name="email" id="email" />
-              <div id="email" className="invalid-feedback">
-                {emailError}
-              </div>
-            </>
-          ) : (
-            <input type="email" className="form-control" name="email" id="email" />
-          )}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          {passwordError ? (
-            <>
-              <input type="password" className="form-control is-invalid" id="password" />
-              <div id="password" className="invalid-feedback">
-                {passwordError}
-              </div>
-            </>
-          ) : (
-            <input type="password" className="form-control" id="password" />
-          )}
-        </div>
-
-        <ul>
-          {errors.map((error, index) => (
-            <li>
-              <div key={index} className="alert alert-danger" role="alert">
-                {error.message}
-              </div>
-            </li>
-          ))}
-        </ul>
-
-        {successMessage && (
-          <div className="alert alert-primary" role="alert">
-            {successMessage}
-          </div>
-        )}
-
-        <button type="submit" className="btn btn-primary" disabled={isButtonDisabled}>
-          Sign Up
-        </button>
-      </form>
+      <AuthForm
+        onSubmit={onSubmit}
+        fields={[
+          {
+            display: "Email Address",
+            name: "email",
+            type: "email",
+            error: emailError,
+            required: true,
+            readonly: false,
+          },
+          {
+            display: "Password",
+            name: "password",
+            type: "password",
+            error: passwordError,
+            required: true,
+            readonly: false,
+          },
+        ]}
+        errors={errors}
+        successMessage={successMessage}
+        isSubmitDisabled={isSubmitDisabled}
+      />
     </div>
   );
 }
