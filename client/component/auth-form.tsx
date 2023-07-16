@@ -45,6 +45,7 @@ export default function AuthForm(props: {
           </div>
         );
       })}
+
       <ul>
         {props.errors.map((error, index) => (
           <li>

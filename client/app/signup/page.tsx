@@ -3,6 +3,7 @@ import { useState, FormEvent } from "react";
 
 import useFormSubmit, { ErrorDetails } from "@/hook/use-form-submit";
 import AuthForm from "@/component/auth-form";
+import { useRouter } from "next/navigation"; //hook router khusus dari nextjs lgsg ngatur api call ke server, bukan react-router-dom yg ck pindah2 url doang
 
 type SignupApiResponseBody = {
   id: string;
@@ -24,6 +25,8 @@ export default function Signup() {
   const [emailError, setEmailError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
 
+  const router = useRouter();
+
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -43,6 +46,8 @@ export default function Signup() {
       );
 
       setSuccessMessage("Successfully signed up");
+
+      router.push("/");
     } catch (err) {
       console.log(err);
     }
