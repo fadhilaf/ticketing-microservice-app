@@ -1,3 +1,4 @@
+//folder api folder spesial, idk dijadiin route "https://nextjs.org/docs/app/building-your-application/routing#colocation"
 import axios from "axios";
 import { cookies } from "next/headers";
 

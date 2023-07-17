@@ -1,8 +1,8 @@
 "use client";
 import { useState, FormEvent } from "react";
 
-import useFormSubmit, { ErrorDetails } from "@/hook/use-form-submit";
-import AuthForm from "@/component/auth-form";
+import useFormSubmit, { ErrorDetails } from "@/app/lib/use-form-submit";
+import AuthForm from "@/app/components/auth-form";
 import { useRouter } from "next/navigation"; //hook router khusus dari nextjs lgsg ngatur api call ke server, bukan react-router-dom yg ck pindah2 url doang
 
 type SigninApiResponseBody = {
@@ -47,6 +47,7 @@ export default function Signin() {
 
       setSuccessMessage("Successfully signed in");
 
+      router.refresh(); //refresh biar data currentUser di header component ke update karena refetch data ke server
       router.push("/");
     } catch (err) {
       console.log(err);
@@ -55,6 +56,7 @@ export default function Signin() {
 
   return (
     <div className="flex flex-col items-center justify-center">
+      <h3 className="h3">Sign In</h3>
       <AuthForm
         onSubmit={onSubmit}
         fields={[

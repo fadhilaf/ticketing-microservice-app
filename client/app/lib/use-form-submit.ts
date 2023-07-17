@@ -1,3 +1,4 @@
+//folder lib folder spesial, idk dijadiin route "https://nextjs.org/docs/app/building-your-application/routing#colocation"
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { Dispatch, SetStateAction } from "react";
 

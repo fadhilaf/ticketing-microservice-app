@@ -1,6 +1,7 @@
+//folder components folder spesial, idk dijadiin route "https://nextjs.org/docs/app/building-your-application/routing#colocation"
 import { FormEvent, useId } from "react";
 
-import { ErrorDetails } from "@/hook/use-form-submit";
+import { ErrorDetails } from "@/app/lib/use-form-submit";
 
 type FieldDatas = {
   display: string;

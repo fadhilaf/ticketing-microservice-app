@@ -1,14 +1,6 @@
-import buildClient from "@/api/build-client";
+import buildClient from "@/app/api/build-client";
 
-type currentUserBodyResponse = {
-  currentUser: CurrentUser | null;
-};
-
-type CurrentUser = {
-  id: string;
-  email: string;
-  iat: number;
-};
+import { currentUserBodyResponse } from "@/app/components/header";
 
 //di next js componentny biso async, gk kyk react yg gk biso
 export default async function Home() {
