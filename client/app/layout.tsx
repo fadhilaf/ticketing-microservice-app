@@ -1,6 +1,7 @@
-import "./globals.css";
 import type { Metadata } from "next";
-import "bootstrap/dist/css/bootstrap.css";
+
+import "bootstrap/dist/css/bootstrap.css"; //add bootstrap
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "IndieStage",

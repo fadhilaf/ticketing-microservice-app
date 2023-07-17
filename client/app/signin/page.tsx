@@ -1,21 +1,21 @@
-"use client"; //kalau pengen interaktif, harus pake client component. tapi kalo dk perlu interaktif trus cuma pengen fetch data pas restart bae, pake server component
+"use client";
 import { useState, FormEvent } from "react";
 
 import useFormSubmit, { ErrorDetails } from "@/hook/use-form-submit";
 import AuthForm from "@/component/auth-form";
 import { useRouter } from "next/navigation"; //hook router khusus dari nextjs lgsg ngatur api call ke server, bukan react-router-dom yg ck pindah2 url doang
 
-type SignupApiResponseBody = {
+type SigninApiResponseBody = {
   id: string;
   email: string;
 };
 
-interface SignupFormElements extends HTMLFormControlsCollection {
+interface SigninFormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
   password: HTMLInputElement;
 }
 
-export default function Signup() {
+export default function Signin() {
   const [errors, setErrors] = useState<ErrorDetails>([]);
 
   const [successMessage, setSuccessMessage] = useState<string>("");
@@ -30,11 +30,11 @@ export default function Signup() {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const elements = e.currentTarget.elements as SignupFormElements;
+    const elements = e.currentTarget.elements as SigninFormElements;
 
     try {
-      await useFormSubmit<{ email: string; password: string }, SignupApiResponseBody>(
-        "/api/users/signup",
+      await useFormSubmit<{ email: string; password: string }, SigninApiResponseBody>(
+        "/api/users/signin",
         "post",
         {
           email: elements.email.value,
@@ -45,7 +45,7 @@ export default function Signup() {
         setIsSubmitDisabled
       );
 
-      setSuccessMessage("Successfully signed up");
+      setSuccessMessage("Successfully signed in");
 
       router.push("/");
     } catch (err) {
