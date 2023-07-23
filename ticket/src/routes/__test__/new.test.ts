@@ -15,7 +15,6 @@ it("can not be accessed if the user is not signed in", async () => {
 it("can be accessed if the user signed in", async () => {
   const response = await request(app).post("/api/tickets").set("Cookie", global.signin()).send({});
 
-  console.log(response.status);
   expect(response.status).not.toEqual(401);
 });
 

@@ -39,6 +39,7 @@ const userSchema = new Schema<IUser, UserModel>(
     },
   }
 );
+//buat fungsi utk membuat instance model user baru, yang juga mengecek parameter yg diberikan
 userSchema.statics.build = (user: IUser) => {
   return new User(user);
 };
