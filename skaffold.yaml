@@ -23,3 +23,11 @@ build:
         manual:
           - src: '**/*.{tsx,css}'
             dest: .
+    - image: fadhilaf/ticket-ticketing-test
+      context: ticket
+      docker: 
+        dockerfile: Dockerfile
+      sync: 
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

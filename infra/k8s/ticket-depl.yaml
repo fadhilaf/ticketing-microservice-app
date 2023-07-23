@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: ticket-depl 
+spec: 
+  replicas: 1 
+  selector: 
+    matchLabels: 
+      app: ticket 
+  template: 
+    metadata:
+      labels: 
+        app: ticket 
+    spec: 
+      containers: 
+        - name: ticket 
+          image: fadhilaf/ticket-ticketing-test
+          env: 
+          - name: JWT_KEY #nama env variable yg mau dipake image ini (for kubernetes log purpose)
+            valueFrom: 
+              secretKeyRef: 
+                name: jwt-secret #nama object secret yg mau dipakai 
+                key: JWT_KEY #nama key yg mau diambil valueny (harus dari object yg namany jwt-secret)
+--- 
+apiVersion: v1 
+kind: Service #type service default itu ClusterIP
+metadata: 
+  name: ticket-srv 
+spec: 
+  selector: 
+    app: ticket
+  ports: 
+  - name: ticket 
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
