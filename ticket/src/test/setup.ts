@@ -1,5 +1,6 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 
 import request from "supertest";
 
@@ -7,7 +8,7 @@ import app from "../app";
 
 //buat global function (function yg bisa diakses di semua test, dan dk perlu export export lagi)
 declare global {
-  var signin: () => Promise<string[]>;
+  var signin: () => string[];
 }
 
 // instance mock mongodb yg dijalankan di memori (biar cepet, cepet dibuat, cepet diakses, cepet diapus)
@@ -42,17 +43,31 @@ afterAll(async () => {
 });
 
 //fungsi global signin utk helper test
-global.signin = async () => {
+global.signin = () => {
   // perlu set JWT_KEY karena test jest tidak ada env
   process.env.JWT_KEY = "asdf";
 
-  const email = "test@test.test";
-  const password = "password";
+  // karena di service ticket tidak ada signup, maka kita buat jwt token manual
+  // kenapa tidak call service auth saja? karena kita tidak mau test service auth, kita hanya mau test service ticket (no dependency on other service)
 
-  const response = await request(app)
-    .post("/api/users/signup")
-    .send({ email, password })
-    .expect(201);
+  // build jwt payload
+  const payload = {
+    id: new mongoose.Types.ObjectId().toHexString(),
+    email: "test@test.test",
+  };
 
-  return response.get("Set-Cookie");
+  // create jwt token
+  const token = jwt.sign(payload, process.env.JWT_KEY!);
+
+  // build session object
+  const session = { jwt: token };
+
+  // convert session object to json
+  const sessionJSON = JSON.stringify(session);
+
+  // encode session json to base64 (karena cookie yg dikirim ke browser harus berupa string, dan string tsb harus berupa encoding base64)
+  const base64 = Buffer.from(sessionJSON).toString("base64");
+
+  // masukin jwt token ny ke template string yang menyerupai cookie header asli (tapi kalo seperti ini, bakal perlu diupdate trus seiring berubahnya cookie header asli)
+  return [`session=${base64}`];
 };

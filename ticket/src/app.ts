@@ -3,7 +3,9 @@ import { json } from "body-parser";
 import "express-async-errors"; // package ini harus diimport sebelum import routes, karena package ini akan ngehandle error yg terjadi di async function
 import cookieSession from "cookie-session";
 
-import { errorHandler, NotFoundError } from "@indiestage/common";
+import { currentUser, requireAuth, errorHandler, NotFoundError } from "@indiestage/common";
+
+import { createTicketRouter } from "./routes/new";
 
 const app = express();
 
@@ -15,6 +17,12 @@ app.use(
     secure: process.env.NODE_ENV !== "test", // cookie only works if user visit our app using https connection
   })
 );
+
+app.use(currentUser);
+
+app.use(requireAuth);
+
+app.use(createTicketRouter);
 
 //for all http method
 app.all("*", async (req, res) => {
