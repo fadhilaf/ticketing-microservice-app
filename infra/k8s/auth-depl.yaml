@@ -21,6 +21,8 @@ spec:
               secretKeyRef: 
                 name: jwt-secret #nama object secret yg mau dipakai 
                 key: JWT_KEY #nama key yg mau diambil valueny (harus dari object yg namany jwt-secret)
+          - name: MONGO_URI
+            value: 'mongodb://auth-mongo-srv:27017/ticket' #value langsung tanpa object secret kubernetes
 --- 
 apiVersion: v1 
 kind: Service #type service default itu ClusterIP

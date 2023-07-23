@@ -16,11 +16,13 @@ spec:
         - name: ticket 
           image: fadhilaf/ticket-ticketing-test
           env: 
-          - name: JWT_KEY #nama env variable yg mau dipake image ini (for kubernetes log purpose)
+          - name: JWT_KEY #nama env variable yg mau dipake image ini (yg diambil samo process.env.{key})
             valueFrom: 
               secretKeyRef: 
                 name: jwt-secret #nama object secret yg mau dipakai 
                 key: JWT_KEY #nama key yg mau diambil valueny (harus dari object yg namany jwt-secret)
+          - name: MONGO_URI
+            value: 'mongodb://ticket-mongo-srv:27017/ticket' #value langsung tanpa object secret kubernetes
 --- 
 apiVersion: v1 
 kind: Service #type service default itu ClusterIP

@@ -4,7 +4,7 @@ import app from "./app";
 
 const start = async () => {
   try {
-    await mongoose.connect("mongodb://ticket-mongo-srv:27017/ticket");
+    await mongoose.connect(process.env.MONGO_URI!);
     console.log("Connected to MongoDB");
   } catch (err) {
     console.error(err);
